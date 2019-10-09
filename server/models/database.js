@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('readinglist', 'postgres', 'jared', {
+const sequelize = new Sequelize('multiuserreadinglist', 'postgres', 'jared', {
   host: 'localhost',
   dialect: 'postgres',
 });
@@ -40,14 +40,23 @@ const User = sequelize.define('user', {
   modelName: 'user',
 });
 
-// User.sync().then(() => {
-//   return User.create({
-//     firstName: 'Roger',
-//     lastName: 'Rabbit',
-//     username: 'rrabbit',
-//     password: 'carrots12'
-//   })
-// })
+User.sync({force: true}).then(() => {
+  return User.create({
+    firstName: 'Roger',
+    lastName: 'Rabbit',
+    username: 'rrabbit',
+    password: 'carrots12'
+  })
+})
+
+User.associate = function(models) {
+  User.belongsToMany(models.Book, {
+    through: 'UserBooks',
+    as: 'users',
+    foreignKey: 'userId',
+    otherKey: 'bookId'
+  })
+}
 
 // define Books model
 const Book = sequelize.define('book', {
@@ -73,11 +82,43 @@ const Book = sequelize.define('book', {
   modelName: 'book',
 });
 
-// Book.sync().then(() => {
-//   return Book.create({
-//     title: 'Post Office',
-//     author: 'Charles Bukowski',
-//   })
-// })
+Book.sync({force: true}).then(() => {
+  return Book.create({
+    title: 'Post Office',
+    author: 'Charles Bukowski',
+  })
+})
 
-module.exports = { User, Book };
+Book.associate = function(models) {
+  Book.belongsToMany(models.User, {
+    through: 'UserBooks',
+    as: 'books',
+    foreignKey: 'bookId',
+    otherKey: 'userId'
+  })
+}
+
+// define UserBook model
+const UserBook = sequelize.define('userbook', {
+  userId: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  bookId: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  modelName: 'userbook',
+});
+
+UserBook.sync({force: true}).then(() => {
+  console.log('great success')
+  return UserBook.create({
+    userId: 1,
+    bookId: 1
+  })
+}).catch(err => console.log(err))
+
+// module.exports = { User, Book, UserBook};

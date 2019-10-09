@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 
 const { User, Book } = require('../models/database.js');
 
-const sequelize = new Sequelize('readinglist', 'postgres', 'jared', {
+const sequelize = new Sequelize('multiuserreadinglist', 'postgres', 'jared', {
   host: 'localhost',
   dialect: 'postgres',
 });
