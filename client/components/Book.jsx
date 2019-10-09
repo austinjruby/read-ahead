@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 const Book = (props) => {
   const {
-    id, title, author, genre, hasRead, deleteBook
+    id, title, author, genre, hasRead, deleteBook, getBookIdForUpdate
   } = props;
   return (
     <div className={`book book-${id}`}>
@@ -11,6 +11,7 @@ const Book = (props) => {
       <p>{author}</p>
       <p>{genre}</p>
       <button className="read-button" type="button" />
+      <button id={id} className="update-button" type="button" onClick={getBookIdForUpdate}>update</button>
     </div>
   );
 };

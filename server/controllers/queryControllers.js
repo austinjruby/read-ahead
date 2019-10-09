@@ -11,6 +11,7 @@ const sequelize = new Sequelize('readinglist', 'postgres', 'jared', {
 
 // add a book to d-base
 queryController.addBook = (req, res, next) => {
+  console.log(req.body)
   Book.create({
     title: req.body.title,
     author: req.body.author,
@@ -23,11 +24,13 @@ queryController.addBook = (req, res, next) => {
 
 // get all books from d-base
 queryController.getAllBooks = (req, res, next) => {
+  console.log('getting all books')
   Book.findAll({
     attributes: ['id', 'title', 'author', 'genre'],
   }).then(books => JSON.stringify(books))
-    .then((booksObj) => {
-      res.status(200).send(booksObj);
+    .then((booksArr) => {
+      console.log('these are your books', booksArr)
+      res.status(200).send(booksArr);
       res.end();
     })
     .catch(err => console.log(err));
@@ -35,14 +38,19 @@ queryController.getAllBooks = (req, res, next) => {
 
 // update a book in the d-base
 queryController.updateBook = (req, res, next) => {
-  console.log(req.body.genre);
+  console.log('about to update this book', req.body);
+  console.log('title', req.body.title)
   Book.update(
-    { genre: req.body.genre },
+    { 
+      title: req.body.title,
+      author: req.body.author,
+      genre: req.body.genre
+    },
     { returning: true, where: { id: req.params.bookId } },
   ).then(([rowsUpdate, [updatedBook]]) => {
-    console.log(`successfully updated book with id ${updatedBook.id}`);
+    // console.log(`successfully updated book with id ${[...updatedBook]}`);
     return next();
-  });
+  }).catch(err=> console.log(err));
 };
 
 // remove a book from the d-base
