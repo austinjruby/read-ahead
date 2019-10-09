@@ -5,33 +5,26 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: [
-        {
-          id: 1,
-          title: 'The Painted Bird',
-          author: 'Jerzy Kosinski',
-          genre: null,
-          hasRead: false,
-        },
-        {
-          id: 2,
-          title: 'Men Without Women',
-          author: 'Ernest Hemingway',
-          genre: 'literary fiction',
-          hasRead: false,
-        },
-      ],
+      books: null,
     };
+  }
+
+  componentDidMount() {
+    fetch('/api').then(response => response.json())
+      .then(books => this.setState({books}))
+      .catch(err => console.log(err));
   }
 
   render() {
     const booksTags = [];
     const { books } = this.state;
-    for (let i = 0; i < books.length; i++) {
-      const {
-        id, title, author, genre, hasRead,
-      } = books[i];
-      booksTags.push(<Book id={id} title={title} author={author} genre={genre} hasRead={hasRead} key={id} />);
+    if (books) {
+      for (let i = 0; i < books.length; i++) {
+        const {
+          id, title, author, genre, hasRead,
+        } = books[i];
+        booksTags.push(<Book id={id} title={title} author={author} genre={genre} hasRead={hasRead} key={i} />);
+      }
     }
     return (
       <div className="list">

@@ -31,14 +31,14 @@ app.delete('/api/:bookId',
 // serve static content from client folder
 app.use(express.static(path.resolve(__dirname, '/build')));
 
-// // serve compiled bundle file in webpack production mode
-// app.get('/build/bundle.js', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, '../build/bundle.js'));
-// });
+// serve compiled bundle file in webpack production mode
+app.get('/build/bundle.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../build/bundle.js'));
+});
 
 // serve html file
 app.get('/', (req, res, next) => {
-  res.sendFile(path.resolve(__dirname, '../client/src/index.html'));
+  res.sendFile(path.resolve(__dirname, '../index.html'));
 });
 
 app.listen(PORT, () => { console.log(`listening on port ${PORT}`); });
