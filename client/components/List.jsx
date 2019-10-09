@@ -4,9 +4,21 @@ import Book from './Book';
 class List extends Component {
   constructor(props) {
     super(props);
+    this.deleteBook = this.deleteBook.bind(this);
     this.state = {
       books: null,
     };
+  }
+
+  deleteBook(eventObj) {
+    const bookId = eventObj.target.id;
+    fetch(`/api/${bookId}`, {
+      method: 'DELETE',
+    }).then(() => {
+      fetch('/api').then(response => response.json())
+        .then(books => this.setState({books}))
+        .catch(err => console.log(err));
+      })
   }
 
   componentDidMount() {
@@ -23,7 +35,7 @@ class List extends Component {
         const {
           id, title, author, genre, hasRead,
         } = books[i];
-        booksTags.push(<Book id={id} title={title} author={author} genre={genre} hasRead={hasRead} key={i} />);
+        booksTags.push(<Book id={id} title={title} author={author} genre={genre} hasRead={hasRead} deleteBook={this.deleteBook} key={i} />);
       }
     }
     return (

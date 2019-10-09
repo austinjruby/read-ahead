@@ -24,7 +24,7 @@ queryController.addBook = (req, res, next) => {
 // get all books from d-base
 queryController.getAllBooks = (req, res, next) => {
   Book.findAll({
-    attributes: ['title', 'author', 'genre'],
+    attributes: ['id', 'title', 'author', 'genre'],
   }).then(books => JSON.stringify(books))
     .then((booksObj) => {
       res.status(200).send(booksObj);

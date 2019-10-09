@@ -1,27 +1,12 @@
 import React, { Component } from 'react';
 
-// class Book extends Component {
-//   constructor(props) {
-//     super(props);
-//   }
-
-//   render() {
-//     console.log(this.props);
-//     return (
-//       <div className={`book-${this.props.bookInfo.id}`}>
-//         I am a book, bittttttttcxccccccccccccccc
-//       </div>
-//     );
-//   }
-// }
-
 const Book = (props) => {
   const {
-    id, title, author, genre, hasRead,
+    id, title, author, genre, hasRead, deleteBook
   } = props;
   return (
     <div className={`book book-${id}`}>
-      <button className="delete-button" type="button">X</button>
+      <button id={id} className="delete-button" type="button" onClick={deleteBook}>X</button>
       <p>{title}</p>
       <p>{author}</p>
       <p>{genre}</p>
