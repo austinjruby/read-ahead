@@ -7,6 +7,7 @@ class List extends Component {
     this.addBook = this.addBook.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
     this.updateBook = this.updateBook.bind(this);
+    this.readBook = this.readBook.bind(this);
     this.getBookIdForUpdate = this.getBookIdForUpdate.bind(this);
     this.state = {
       updateBookId: null,
@@ -77,6 +78,23 @@ class List extends Component {
       .catch(err => console.log(err))
   }
 
+  readBook(eventObj) {
+    const bookId = eventObj.target.id;
+    const myBody = {
+      userId: this.props.userId,
+      bookId: bookId,
+    }
+    fetch('/api', {
+      method: 'PATCH',
+      body: JSON.stringify(myBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(books => this.setState({books}))
+      .catch(err => console.log(err))
+  }
+
   getBookIdForUpdate(eventObj) {
     const updateBookId = eventObj.target.id;
     this.setState({updateBookId});
@@ -95,9 +113,9 @@ class List extends Component {
     if (books) {
       for (let i = 0; i < books.length; i++) {
         const {
-          id, title, author, genre, hasRead,
+          id, title, author, genre, read,
         } = books[i];
-        booksTags.push(<Book id={id} title={title} author={author} genre={genre} hasRead={hasRead} deleteBook={this.deleteBook} getBookIdForUpdate={this.getBookIdForUpdate} key={`book${i}`} />);
+        booksTags.push(<Book id={id} title={title} author={author} genre={genre} read={read} deleteBook={this.deleteBook} readBook={this.readBook} getBookIdForUpdate={this.getBookIdForUpdate} key={`book${i}`} />);
       }
     }
     console.log(this.state);

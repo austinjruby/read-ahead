@@ -28,6 +28,12 @@ app.patch('/api/:bookId',
   queryController.updateBook,
   queryController.getAllBooks);
 
+// update read column for user_book row in d-base
+app.patch('/api',
+  queryController.toggleRead,
+  queryController.getAllBooks
+)
+
 // delete book from d-base
 app.delete('/api/',
   queryController.deleteBook,

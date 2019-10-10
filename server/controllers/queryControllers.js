@@ -38,7 +38,7 @@ queryController.addBook = (req, res, next) => {
 queryController.getAllBooks = (req, res, next) => {
   const userId = req.params.id || res.locals.id
   console.log('getting all books for user:', userId)
-  pool.query(`SELECT id, title, author, genre FROM books JOIN user_books ON user_books.book_id = books.id WHERE user_books.user_id = ${userId}`, 
+  pool.query(`SELECT * FROM books JOIN user_books ON user_books.book_id = books.id WHERE user_books.user_id = ${userId}`, 
     (error, results) => {
       if (error) return next({message: {err: error}});
       res.status(200).json(results.rows)
@@ -50,6 +50,20 @@ queryController.getAllBooks = (req, res, next) => {
 queryController.updateBook = (req, res, next) => {
   
 };
+
+// flip boolean of read column in user_books
+queryController.toggleRead = (req, res, next) => {
+  console.log(req.body)
+  const {userId, bookId} = req.body;
+  res.locals.id = userId;
+  pool.query(`UPDATE user_books SET read = NOT read WHERE user_id=${userId} AND book_id=${bookId}`,
+  (error, result) => {
+    if (error) return next({message: {err: error}});
+    console.log(`updated read`)
+    return next();
+  }
+  )
+}
 
 // remove a book from the d-base
 queryController.deleteBook = (req, res, next) => {
