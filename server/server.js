@@ -41,11 +41,6 @@ app.get('/', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../index.html'));
 });
 
-// TODO: delete this and actually do authentication
-app.get('/fart', (req, res, next) => {
-  res.end('NICE!')
-})
-
 app.all('*', (req, res) => res.status(404).send('path not found'))
 
 app.use((err, req, res, next) => {

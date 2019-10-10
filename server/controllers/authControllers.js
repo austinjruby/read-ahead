@@ -1,30 +1,28 @@
-const authController = {};
-
-const Sequelize = require('sequelize');
-
-const { User } = require('../models/database.js');
-
-const sequelize = new Sequelize('multiuserreadinglist', 'postgres', 'jared', {
+const {Pool} = require('pg');
+const pool = new Pool ({
+  user: 'postgres',
   host: 'localhost',
-  dialect: 'postgres',
-});
+  database: 'multiuserreadinglist',
+  password: 'jared',
+  port: 5432,
+})
+
+const authController = {};
 
 authController.verifyUser = (req, res, next) => {
   const { username, password } = req.body;
-  User.findOne({ 
-    attributes: ['id', 'username', 'password'],
-    where: { username: username } 
-  })
-    // .then((response => JSON.stringify(response)))
-    .then(user => {
-      user.password === password ? 
-        res.status(200).send({userId: user.id, status: 'success'}) :
-        res.status(200).send({status: 'failed'})
-    })
-    .catch(err => {
-      next({ message: { err: `user not found: ${err}` }})
-      res.send({status: 'failed'})
-    })
+  pool.query(`SELECT id, username, password FROM users WHERE username='${username}'`,
+    (error, result) => {
+      if (error) {
+        next({ message: { err: `user not found: ${error}` }})
+        res.send({status: 'failed'})
+        res.end()
+      }
+      result.rows[0].password === password ?
+      res.status(200).send({userId: result.rows[0].id, status: 'success'}) :
+      res.status(200).send({status: 'failed'})
+    }
+  )
 }
 
 module.exports = authController;

@@ -100,6 +100,7 @@ class List extends Component {
         booksTags.push(<Book id={id} title={title} author={author} genre={genre} hasRead={hasRead} deleteBook={this.deleteBook} getBookIdForUpdate={this.getBookIdForUpdate} key={`book${i}`} />);
       }
     }
+    console.log(this.state);
     return (
       <div className="list">
         <form className="add-book-form">

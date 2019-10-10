@@ -1,91 +1,69 @@
+const {Pool} = require('pg');
+const pool = new Pool ({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'multiuserreadinglist',
+  password: 'jared',
+  port: 5432,
+})
+
 const queryController = {};
 
-const Sequelize = require('sequelize');
 
-const { User, Book, UserBook } = require('../models/database.js');
-
-const sequelize = new Sequelize('multiuserreadinglist', 'postgres', 'jared', {
-  host: 'localhost',
-  dialect: 'postgres',
-});
 
 // add a book to d-base
 queryController.addBook = (req, res, next) => {
-  console.log(req.body)
-  res.locals.id = req.body.userId
-  Book.create({
-    title: req.body.title,
-    author: req.body.author,
-    genre: req.body.genre,
-  }).then((newBook) => {
-    console.log(`new book created with id ${newBook.id}`);
-    return next();
-  }).catch(err => console.log(`Book create error: ${err}`));
+  const { userId, title, author, genre} = req.body;
+  res.locals.id = userId;
+  console.log('res.locals.id', res.locals.id);
+  pool.query('INSERT INTO books (title, author, genre) VALUES ($1, $2, $3) RETURNING *',
+    [title, author, genre],
+    (error, result) => {
+      if (error) return next({message: {err: error}});
+      console.log(`added book ${JSON.stringify(result.rows[0])}`);
+      const bookId = result.rows[0].id;
+      pool.query('INSERT INTO user_books (user_id, book_id) VALUES ($1, $2)',
+        [res.locals.id, bookId],
+        (error, result) => {
+          if (error) return next({message: {err: error}});
+          console.log('user_book row created');
+          return next();
+        }
+      )
+    }  
+  )
 };
 
 // get all books from d-base
 queryController.getAllBooks = (req, res, next) => {
-  const userId = req.params.id || res.locals.id;
-  console.log('getting all books')
-  console.log(userId)
-  Book.findAll({
-    attributes: ['id', 'title', 'author', 'genre'],
-    include: [{
-      model: User,
-      through: {
-        where: {userId: userId}
-      }
-    }],
-  }).then(books => JSON.stringify(books))
-    .then((booksArr) => {
-      console.log('these are your books', booksArr)
-      res.status(200).send(booksArr);
-      res.end();
-    })
-    .catch(err => next({message: {err: err}}));
+  const userId = req.params.id || res.locals.id
+  console.log('getting all books for user:', userId)
+  pool.query(`SELECT id, title, author, genre FROM books JOIN user_books ON user_books.book_id = books.id WHERE user_books.user_id = ${userId}`, 
+    (error, results) => {
+      if (error) return next({message: {err: error}});
+      res.status(200).json(results.rows)
+    }
+  )
 };
-// queryController.getAllBooks = (req, res, next) => {
-//   console.log('getting all books')
-//   Book.findAll({
-//     attributes: ['id', 'title', 'author', 'genre'],
-//   }).then(books => JSON.stringify(books))
-//     .then((booksArr) => {
-//       console.log('these are your books', booksArr)
-//       res.status(200).send(booksArr);
-//       res.end();
-//     })
-//     .catch(err => next({message: {err: err}}));
-// };
 
 // update a book in the d-base
 queryController.updateBook = (req, res, next) => {
-  console.log('about to update this book', req.body);
-  console.log('title', req.body.title)
-  Book.update(
-    { 
-      title: req.body.title,
-      author: req.body.author,
-      genre: req.body.genre
-    },
-    { returning: true, where: { id: req.params.bookId } },
-  ).then(([rowsUpdate, [updatedBook]]) => {
-    // console.log(`successfully updated book with id ${[...updatedBook]}`);
-    return next();
-  }).catch(err=> console.log(err));
+  
 };
 
 // remove a book from the d-base
 queryController.deleteBook = (req, res, next) => {
-  UserBook.destroy({
-    where: {
-      user_id: req.body.userId,
-      book_id: req.body.bookId
+  console.log(req.body)
+  const {userId, bookId} = req.body;
+  console.log('user', userId, 'book', bookId)
+  res.locals.id = userId;
+  pool.query(`DELETE FROM user_books WHERE user_id=${userId} AND book_id=${bookId} RETURNING *`,
+    (error, result) => {
+      if (error) return next({message: {err: error}});
+      console.log(`user_book deleted: ${JSON.stringify(result.rows[0])}`)
+      return next();
     }
-  }).then(() => {
-    console.log(`book ${req.body.bookId} deleted`);
-    return next();
-  })
-    .catch(err => next({message: {err: err}}));
+  )
 };
 
 module.exports = queryController;
