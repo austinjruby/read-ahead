@@ -33,7 +33,7 @@ queryController.getAllBooks = (req, res, next) => {
       res.status(200).send(booksArr);
       res.end();
     })
-    .catch(err => console.log(err));
+    .catch(err => next({message: {err: err}}));
 };
 
 // update a book in the d-base

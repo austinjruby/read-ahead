@@ -5,11 +5,15 @@ const bodyParser = require('body-parser');
 const PORT = 3000;
 
 const app = express();
+const authController = require('./controllers/authControllers.js');
 const queryController = require('./controllers/queryControllers.js');
 
 // body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+
+// authenticate user trying to log in (in d-base)
+app.post('/auth', authController.verifyUser)
 
 // get all books from d-base
 app.get('/api', queryController.getAllBooks);
@@ -37,9 +41,15 @@ app.get('/', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../index.html'));
 });
 
+// TODO: delete this and actually do authentication
+app.get('/fart', (req, res, next) => {
+  res.end('NICE!')
+})
+
 app.all('*', (req, res) => res.status(404).send('path not found'))
 
 app.use((err, req, res, next) => {
+  console.log("err:", err)
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 400,
