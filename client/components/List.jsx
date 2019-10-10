@@ -83,7 +83,8 @@ class List extends Component {
   }
 
   componentDidMount() {
-    fetch('/api').then(response => response.json())
+    fetch(`/api/${this.props.userId}`)
+      .then(response => response.json())
       .then(books => this.setState({books}))
       .catch(err => console.log(err));
   }

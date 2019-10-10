@@ -12,27 +12,30 @@ const sequelize = new Sequelize('multiuserreadinglist', 'postgres', 'jared', {
 // add a book to d-base
 queryController.addBook = (req, res, next) => {
   console.log(req.body)
+  res.locals.id = req.body.userId
   Book.create({
     title: req.body.title,
     author: req.body.author,
     genre: req.body.genre,
   }).then((newBook) => {
     console.log(`new book created with id ${newBook.id}`);
-    UserBook.create({
-      user_id: req.body.userId,
-      book_id: newBook.id
-    }).then((newUserBook) => {
-      console.log(`new join row created with id ${newUserBook.id}`)
-      return next();
-    }).catch(err => console.log(`UserBook create error: ${err}`))
+    return next();
   }).catch(err => console.log(`Book create error: ${err}`));
 };
 
 // get all books from d-base
 queryController.getAllBooks = (req, res, next) => {
+  const userId = req.params.id || res.locals.id;
   console.log('getting all books')
+  console.log(userId)
   Book.findAll({
     attributes: ['id', 'title', 'author', 'genre'],
+    include: [{
+      model: User,
+      through: {
+        where: {userId: userId}
+      }
+    }],
   }).then(books => JSON.stringify(books))
     .then((booksArr) => {
       console.log('these are your books', booksArr)
@@ -41,6 +44,18 @@ queryController.getAllBooks = (req, res, next) => {
     })
     .catch(err => next({message: {err: err}}));
 };
+// queryController.getAllBooks = (req, res, next) => {
+//   console.log('getting all books')
+//   Book.findAll({
+//     attributes: ['id', 'title', 'author', 'genre'],
+//   }).then(books => JSON.stringify(books))
+//     .then((booksArr) => {
+//       console.log('these are your books', booksArr)
+//       res.status(200).send(booksArr);
+//       res.end();
+//     })
+//     .catch(err => next({message: {err: err}}));
+// };
 
 // update a book in the d-base
 queryController.updateBook = (req, res, next) => {

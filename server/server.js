@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded());
 app.post('/auth', authController.verifyUser)
 
 // get all books from d-base
-app.get('/api', queryController.getAllBooks);
+app.get('/api/:id', queryController.getAllBooks);
 
 // add book to d-base
 app.post('/api',
