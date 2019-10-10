@@ -46,11 +46,6 @@ queryController.getAllBooks = (req, res, next) => {
   )
 };
 
-// update a book in the d-base
-queryController.updateBook = (req, res, next) => {
-  
-};
-
 // flip boolean of read column in user_books
 queryController.toggleRead = (req, res, next) => {
   console.log(req.body)

@@ -59,36 +59,9 @@ class App extends Component {
     }
     return <div>
       {comp}
-      <button onClick={() => this.setState({status: "loading"})}>LOADING</button>
-      <button onClick={() => this.setState({status: "success"})}>SUCCESS</button>
-      <button onClick={() => this.setState({status: "fail"})}>FAIL</button>
-      <button onClick={() => this.setState({status: null})}>RESET</button>
-      <button onClick={() => this.setState({status: null})}>LOGIN</button>
     </div>
 
   }
 }
-
-
-// const App = () => (
-//  <Router>
-//     <div>
-//       <Login fakeAuth={fakeAuth}/>
-
-//       <Switch>
-//         {/* <Route path="/signup">
-//           <Signup />
-//         </Route> */}
-//         <Route path="/protected">
-//           <List />
-//         </Route>
-//       </Switch>
-//     </div>
-//   </Router>
-
-  // <div className="App">
-  //   <List />
-  // </div>
-// );
 
 export default App;

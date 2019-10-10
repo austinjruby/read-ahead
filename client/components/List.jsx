@@ -6,9 +6,7 @@ class List extends Component {
     super(props);
     this.addBook = this.addBook.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
-    this.updateBook = this.updateBook.bind(this);
     this.readBook = this.readBook.bind(this);
-    this.getBookIdForUpdate = this.getBookIdForUpdate.bind(this);
     this.state = {
       updateBookId: null,
       books: null,
@@ -56,28 +54,6 @@ class List extends Component {
       .catch(err => console.log(err));
   }
 
-  updateBook(eventObj) {
-    eventObj.preventDefault();
-    const form = document.querySelector('.update-book-form');
-    const title = form.title.value;
-    const author = form.author.value;
-    const genre = form.genre.value;
-    const myBody = {
-      title: title,
-      author: author,
-      genre: genre
-    }
-    fetch(`/api/${this.state.updateBookId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(myBody),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => response.json())
-      .then(books => this.setState({books}))
-      .catch(err => console.log(err))
-  }
-
   readBook(eventObj) {
     const bookId = eventObj.target.id;
     const myBody = {
@@ -95,11 +71,6 @@ class List extends Component {
       .catch(err => console.log(err))
   }
 
-  getBookIdForUpdate(eventObj) {
-    const updateBookId = eventObj.target.id;
-    this.setState({updateBookId});
-  }
-
   componentDidMount() {
     fetch(`/api/${this.props.userId}`)
       .then(response => response.json())
@@ -115,7 +86,7 @@ class List extends Component {
         const {
           id, title, author, genre, read,
         } = books[i];
-        booksTags.push(<Book id={id} title={title} author={author} genre={genre} read={read} deleteBook={this.deleteBook} readBook={this.readBook} getBookIdForUpdate={this.getBookIdForUpdate} key={`book${i}`} />);
+        booksTags.push(<Book id={id} title={title} author={author} genre={genre} read={read} deleteBook={this.deleteBook} readBook={this.readBook} key={`book${i}`} />);
       }
     }
     console.log(this.state);
@@ -131,15 +102,6 @@ class List extends Component {
           <input type="submit" value="Add Book" onClick={this.addBook}/>
         </form>
         {booksTags}
-        <form className="update-book-form">
-          Title:
-          <input type="text" name="title"/>
-          Author:
-          <input type="text" name="author"/>
-          Genre (optional)
-          <input type="text" name="genre"/>
-          <input type="submit" value="Update Book" onClick={this.updateBook}/>
-        </form>
       </div>
     );
   }

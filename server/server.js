@@ -23,11 +23,6 @@ app.post('/api',
   queryController.addBook,
   queryController.getAllBooks);
 
-// update book in d-base
-app.patch('/api/:bookId',
-  queryController.updateBook,
-  queryController.getAllBooks);
-
 // update read column for user_book row in d-base
 app.patch('/api',
   queryController.toggleRead,
