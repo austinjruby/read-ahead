@@ -38,10 +38,7 @@ class App extends Component {
   }
 
   render() {
-    console.log('hi')
     const {status} = this.state
-    console.log('state', this.state)
-    console.log('status', status)
     let comp;
     switch (status) {
       case "success":
