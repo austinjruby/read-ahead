@@ -21,6 +21,7 @@ class List extends Component {
     const author = form.author.value;
     const genre = form.genre.value;
     const myBody = {
+      userId: this.props.userId,
       title: title,
       author: author,
       genre: genre
@@ -39,8 +40,16 @@ class List extends Component {
   
   deleteBook(eventObj) {
     const bookId = eventObj.target.id;
-    fetch(`/api/${bookId}`, {
+    const myBody = {
+      userId: this.props.userId,
+      bookId: bookId,
+    }
+    fetch(`/api/`, {
       method: 'DELETE',
+      body: JSON.stringify(myBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }).then(response => response.json())
       .then(books => this.setState({books}))
       .catch(err => console.log(err));
@@ -80,7 +89,6 @@ class List extends Component {
   }
 
   render() {
-    console.log(this.state.updateBookId)
     const booksTags = [];
     const { books } = this.state;
     if (books) {

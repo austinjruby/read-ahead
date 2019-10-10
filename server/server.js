@@ -29,7 +29,7 @@ app.patch('/api/:bookId',
   queryController.getAllBooks);
 
 // delete book from d-base
-app.delete('/api/:bookId',
+app.delete('/api/',
   queryController.deleteBook,
   queryController.getAllBooks);
 

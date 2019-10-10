@@ -2,7 +2,7 @@ const queryController = {};
 
 const Sequelize = require('sequelize');
 
-const { User, Book } = require('../models/database.js');
+const { User, Book, UserBook } = require('../models/database.js');
 
 const sequelize = new Sequelize('multiuserreadinglist', 'postgres', 'jared', {
   host: 'localhost',
@@ -18,8 +18,14 @@ queryController.addBook = (req, res, next) => {
     genre: req.body.genre,
   }).then((newBook) => {
     console.log(`new book created with id ${newBook.id}`);
-    return next();
-  }).catch(err => console.log(err));
+    UserBook.create({
+      user_id: req.body.userId,
+      book_id: newBook.id
+    }).then((newUserBook) => {
+      console.log(`new join row created with id ${newUserBook.id}`)
+      return next();
+    }).catch(err => console.log(`UserBook create error: ${err}`))
+  }).catch(err => console.log(`Book create error: ${err}`));
 };
 
 // get all books from d-base
@@ -55,14 +61,16 @@ queryController.updateBook = (req, res, next) => {
 
 // remove a book from the d-base
 queryController.deleteBook = (req, res, next) => {
-  Book.destroy({
+  UserBook.destroy({
     where: {
-      id: req.params.bookId,
-    },
+      user_id: req.body.userId,
+      book_id: req.body.bookId
+    }
   }).then(() => {
-    console.log(`book ${req.params.bookId} deleted`);
+    console.log(`book ${req.body.bookId} deleted`);
     return next();
-  });
+  })
+    .catch(err => next({message: {err: err}}));
 };
 
 module.exports = queryController;

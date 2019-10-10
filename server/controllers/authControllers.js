@@ -18,7 +18,7 @@ authController.verifyUser = (req, res, next) => {
     // .then((response => JSON.stringify(response)))
     .then(user => {
       user.password === password ? 
-        res.status(200).send({status: 'success'}) :
+        res.status(200).send({userId: user.id, status: 'success'}) :
         res.status(200).send({status: 'failed'})
     })
     .catch(err => {

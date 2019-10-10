@@ -1,13 +1,4 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation
-} from 'react-router-dom';
 import List from './List';
 import Login from './Login';
 
@@ -16,7 +7,7 @@ class App extends Component {
     super();
     this.authenticateUser = this.authenticateUser.bind(this);
     this.state = {
-      username: null,
+      userId: null,
       status: null, // success | loading | fail
     }
   }
@@ -39,9 +30,9 @@ class App extends Component {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json())
-      .then(status => {
-        console.log(status);
-        this.setState(status);
+      .then(newState => {
+        console.log(newState);
+        this.setState(newState);
       })
       .catch(err => console.log(err))
   }
@@ -54,7 +45,7 @@ class App extends Component {
     let comp;
     switch (status) {
       case "success":
-        comp = <List />;
+        comp = <List userId={this.state.userId}/>;
         break;
       case "loading":
         comp = <div>loading . . . </div>

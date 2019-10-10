@@ -40,23 +40,23 @@ const User = sequelize.define('user', {
   modelName: 'user',
 });
 
-// User.sync({force: true}).then(() => {
+// User.sync({force: false}).then(() => {
 //   return User.create({
-//     firstName: 'Roger',
-//     lastName: 'Rabbit',
-//     username: 'rrabbit',
-//     password: 'carrots12'
+//     firstName: 'Sally',
+//     lastName: 'Smith',
+//     username: 'ssmith',
+//     password: 'sally12'
 //   })
 // })
 
-// User.associate = function(models) {
-//   User.belongsToMany(models.Book, {
-//     through: 'UserBooks',
-//     as: 'users',
-//     foreignKey: 'userId',
-//     otherKey: 'bookId'
-//   })
-// }
+User.associate = function(models) {
+  User.belongsToMany(models.Book, {
+    through: 'UserBooks',
+    as: 'users',
+    foreignKey: 'userId',
+    otherKey: 'bookId'
+  })
+}
 
 // define Books model
 const Book = sequelize.define('book', {
@@ -82,30 +82,30 @@ const Book = sequelize.define('book', {
   modelName: 'book',
 });
 
-// Book.sync({force: true}).then(() => {
-//   return Book.create({
-//     title: 'Post Office',
-//     author: 'Charles Bukowski',
-//   })
+// Book.sync({force: false}).then(() => {
+  // return Book.create({
+  //   title: 'Post Office',
+  //   author: 'Charles Bukowski',
+  // })
 // })
 
-// Book.associate = function(models) {
-//   Book.belongsToMany(models.User, {
-//     through: 'UserBooks',
-//     as: 'books',
-//     foreignKey: 'bookId',
-//     otherKey: 'userId'
-//   })
-// }
+Book.associate = function(models) {
+  Book.belongsToMany(models.User, {
+    through: 'UserBooks',
+    as: 'books',
+    foreignKey: 'bookId',
+    otherKey: 'userId'
+  })
+}
 
 // define UserBook model
 const UserBook = sequelize.define('userbook', {
-  userId: {
-    type: Sequelize.STRING,
+  user_id: {
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
-  bookId: {
-    type: Sequelize.STRING,
+  book_id: {
+    type: Sequelize.INTEGER,
     allowNull: false
   }
 }, {
@@ -113,12 +113,12 @@ const UserBook = sequelize.define('userbook', {
   modelName: 'userbook',
 });
 
-// UserBook.sync({force: true}).then(() => {
+// UserBook.sync({force: false}).then(() => {
 //   console.log('great success')
 //   return UserBook.create({
-//     userId: 1,
-//     bookId: 1
+//     user_id: 2,
+//     book_id: 1
 //   })
 // }).catch(err => console.log(err))
 
-module.exports = { User, Book, UserBook};
+module.exports = { User, Book, UserBook }
