@@ -18,12 +18,10 @@ class List extends Component {
     const form = document.querySelector('.add-book-form');
     const title = form.title.value;
     const author = form.author.value;
-    const genre = form.genre.value;
     const myBody = {
       userId: this.props.userId,
       title: title,
-      author: author,
-      genre: genre
+      author: author
     }
     // console.log(myBody)
     fetch('/api', {
@@ -97,8 +95,6 @@ class List extends Component {
           <input type="text" name="title"/>
           Author:
           <input type="text" name="author"/>
-          Genre (optional)
-          <input type="text" name="genre"/>
           <input type="submit" value="Add Book" onClick={this.addBook}/>
         </form>
         {booksTags}
