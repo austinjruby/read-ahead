@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './client/index.js',
@@ -25,8 +26,15 @@ module.exports = {
   },
   devServer: {
     publicPath: '/build/',
+    hot: true,
     proxy: {
       '/api': 'http://localhost:3000',
+      '/auth': 'http://localhost:3000',
     },
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Hot Module Replacement',
+    }),
+  ],
 };
