@@ -1,10 +1,9 @@
 body {
-  background-color: blueviolet;
+  background-color: rebeccapurple;
 }
 
 .book {
   display: flex;
-  /* flex-direction: row; */
 }
 
 .read-button-true {

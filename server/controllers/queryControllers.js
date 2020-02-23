@@ -9,13 +9,13 @@ const pool = new Pool({
   port: 5432,
 });
 
-const apiKey = 'AIzaSyCySxE2tiIGvEALbSMIKYT3CTObP3emvKo';
 
 const queryController = {};
 
 
 // add a book to d-base
 queryController.addBook = (req, res, next) => {
+  console.log('api key', process.env.G_API_KEY);
   const { userId, title, author } = req.body;
   res.locals.id = userId;
   console.log('title', title, 'author', author);
@@ -47,7 +47,7 @@ queryController.addBook = (req, res, next) => {
         ? `inauthor:${author}`
         : '';
 
-      const requestURL = `https://www.googleapis.com/books/v1/volumes?q=${titleParam}+${authorParam}&key=AIzaSyCySxE2tiIGvEALbSMIKYT3CTObP3emvKo`;
+      const requestURL = `https://www.googleapis.com/books/v1/volumes?q=${titleParam}+${authorParam}&key=${process.env.G_API_KEY}`;
 
       fetch(requestURL)
         .then((response) => response.json())
