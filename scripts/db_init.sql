@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: books; Type: TABLE; Schema: public; Owner: austinruby
+-- Name: books; Type: TABLE; Schema: public; Owner: raadmin
 --
 
 CREATE TABLE public.books (
@@ -31,10 +31,10 @@ CREATE TABLE public.books (
 );
 
 
-ALTER TABLE public.books OWNER TO austinruby;
+ALTER TABLE public.books OWNER TO raadmin;
 
 --
--- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: austinruby
+-- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: raadmin
 --
 
 CREATE SEQUENCE public.books_id_seq
@@ -46,17 +46,17 @@ CREATE SEQUENCE public.books_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.books_id_seq OWNER TO austinruby;
+ALTER TABLE public.books_id_seq OWNER TO raadmin;
 
 --
--- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: austinruby
+-- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: raadmin
 --
 
 ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 
 
 --
--- Name: user_books; Type: TABLE; Schema: public; Owner: austinruby
+-- Name: user_books; Type: TABLE; Schema: public; Owner: raadmin
 --
 
 CREATE TABLE public.user_books (
@@ -66,10 +66,10 @@ CREATE TABLE public.user_books (
 );
 
 
-ALTER TABLE public.user_books OWNER TO austinruby;
+ALTER TABLE public.user_books OWNER TO raadmin;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: austinruby
+-- Name: users; Type: TABLE; Schema: public; Owner: raadmin
 --
 
 CREATE TABLE public.users (
@@ -79,10 +79,10 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO austinruby;
+ALTER TABLE public.users OWNER TO raadmin;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: austinruby
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: raadmin
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -94,31 +94,31 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO austinruby;
+ALTER TABLE public.users_id_seq OWNER TO raadmin;
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: austinruby
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: raadmin
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: books id; Type: DEFAULT; Schema: public; Owner: austinruby
+-- Name: books id; Type: DEFAULT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.books ALTER COLUMN id SET DEFAULT nextval('public.books_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: austinruby
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: austinruby
+-- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: raadmin
 --
 
 COPY public.books (id, title, author) FROM stdin;
@@ -137,7 +137,7 @@ COPY public.books (id, title, author) FROM stdin;
 
 
 --
--- Data for Name: user_books; Type: TABLE DATA; Schema: public; Owner: austinruby
+-- Data for Name: user_books; Type: TABLE DATA; Schema: public; Owner: raadmin
 --
 
 COPY public.user_books (user_id, book_id, read) FROM stdin;
@@ -149,7 +149,7 @@ COPY public.user_books (user_id, book_id, read) FROM stdin;
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: austinruby
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: raadmin
 --
 
 COPY public.users (id, username, password) FROM stdin;
@@ -159,21 +159,21 @@ COPY public.users (id, username, password) FROM stdin;
 
 
 --
--- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: austinruby
+-- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: raadmin
 --
 
 SELECT pg_catalog.setval('public.books_id_seq', 48, true);
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: austinruby
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: raadmin
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 2, true);
 
 
 --
--- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: austinruby
+-- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.books
@@ -181,7 +181,7 @@ ALTER TABLE ONLY public.books
 
 
 --
--- Name: user_books user_books_pkey; Type: CONSTRAINT; Schema: public; Owner: austinruby
+-- Name: user_books user_books_pkey; Type: CONSTRAINT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.user_books
@@ -189,7 +189,7 @@ ALTER TABLE ONLY public.user_books
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: austinruby
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.users
@@ -197,7 +197,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: austinruby
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.users
@@ -205,7 +205,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: user_books user_books_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: austinruby
+-- Name: user_books user_books_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.user_books
@@ -213,7 +213,7 @@ ALTER TABLE ONLY public.user_books
 
 
 --
--- Name: user_books user_books_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: austinruby
+-- Name: user_books user_books_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: raadmin
 --
 
 ALTER TABLE ONLY public.user_books

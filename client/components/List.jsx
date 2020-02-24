@@ -13,6 +13,13 @@ class List extends Component {
     };
   }
 
+  componentDidMount() {
+    fetch(`/api/${this.props.userId}`)
+      .then((response) => response.json())
+      .then((books) => this.setState({ books }))
+      .catch((err) => console.log(err));
+  }
+
   addBook(eventObj) {
     eventObj.preventDefault();
     const form = document.querySelector('.add-book-form');
@@ -20,60 +27,53 @@ class List extends Component {
     const author = form.author.value;
     const myBody = {
       userId: this.props.userId,
-      title: title,
-      author: author
-    }
+      title,
+      author,
+    };
     // console.log(myBody)
     fetch('/api', {
       method: 'POST',
       body: JSON.stringify(myBody),
       headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => response.json())
-      .then(books => this.setState({books}))
-      .catch(err => console.log(err))
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json())
+      .then((books) => this.setState({ books }))
+      .catch((err) => console.log(err));
   }
-  
+
   deleteBook(eventObj) {
     const bookId = eventObj.target.id;
     const myBody = {
       userId: this.props.userId,
-      bookId: bookId,
-    }
-    fetch(`/api/`, {
+      bookId,
+    };
+    fetch('/api/', {
       method: 'DELETE',
       body: JSON.stringify(myBody),
       headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => response.json())
-      .then(books => this.setState({books}))
-      .catch(err => console.log(err));
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json())
+      .then((books) => this.setState({ books }))
+      .catch((err) => console.log(err));
   }
 
   readBook(eventObj) {
     const bookId = eventObj.target.id;
     const myBody = {
       userId: this.props.userId,
-      bookId: bookId,
-    }
+      bookId,
+    };
     fetch('/api', {
       method: 'PATCH',
       body: JSON.stringify(myBody),
       headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => response.json())
-      .then(books => this.setState({books}))
-      .catch(err => console.log(err))
-  }
-
-  componentDidMount() {
-    fetch(`/api/${this.props.userId}`)
-      .then(response => response.json())
-      .then(books => this.setState({books}))
-      .catch(err => console.log(err));
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json())
+      .then((books) => this.setState({ books }))
+      .catch((err) => console.log(err));
   }
 
   render() {
@@ -87,15 +87,14 @@ class List extends Component {
         booksTags.push(<Book id={id} title={title} author={author} genre={genre} read={read} deleteBook={this.deleteBook} readBook={this.readBook} key={`book${i}`} />);
       }
     }
-    console.log(this.state);
     return (
       <div className="list">
         <form className="add-book-form">
           Title:
-          <input type="text" name="title"/>
+          <input type="text" name="title" />
           Author:
-          <input type="text" name="author"/>
-          <input type="submit" value="Add Book" onClick={this.addBook}/>
+          <input type="text" name="author" />
+          <input type="submit" value="Add Book" onClick={this.addBook} />
         </form>
         {booksTags}
       </div>

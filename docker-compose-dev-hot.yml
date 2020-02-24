@@ -1,0 +1,25 @@
+version: '3'
+services:
+  dev:
+    image: austinjruby/ra-dev-hot
+    container_name: ra-dev-hot
+    ports:
+      - '8080:8080'
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    command: npm run dev:hot
+    depends_on:
+      - pg-db
+  pg-db:
+    image: austinjruby/ra-pg
+    container_name: ra-pg
+    environment:
+      - POSTGRES_DB=booksapi
+      - POSTGRES_USER=raadmin
+      - POSTGRES_PASSWORD=jared
+    volumes:
+      - dev-db-volume:/var/lib/postgresql/data
+volumes:
+  node_modules:
+  dev-db-volume:

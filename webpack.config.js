@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './client/index.js',
@@ -25,6 +25,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   devServer: {
+    host: '0.0.0.0',
     publicPath: '/build/',
     hot: true,
     proxy: {

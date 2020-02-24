@@ -6,10 +6,10 @@ const config = {
 };
 
 if (process.env.NODE_ENV === 'development') {
-  config.host = 'localhost';
+  config.host = 'pg-db';
   config.port = 5432;
   config.database = 'booksapi';
-  config.user = 'postgres';
+  config.user = 'raadmin';
   config.password = 'jared';
 } else if (process.env.NODE_ENV === 'production') {
   config.host = process.env.HOST_NAME;
